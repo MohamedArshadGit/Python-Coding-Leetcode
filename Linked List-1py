@@ -1,0 +1,102 @@
+#simply linked list
+
+class Node: #class Node represents individual element in each node
+    def __init__(self,data=None,next=None): #'data' stores the data or value that node holds,
+        # 'next' is the pointer or reference to the next node in the linked list
+        # 'None' means if no values are provided they are initialized to none
+        self.data=data
+        self.next=next
+class LinkedList: # The LinkedList class represents the linked list itself.
+    def __init__(self):
+        self.head=None # In the __init__ method of the LinkedList class,
+        # you initialize the head attribute to None because initially,
+        # when you create an empty linked list, there are no nodes in it, so the head should be None.
+
+    def get_length(self): #in linked list we dont have inbuilt function to find the length so for some purpose below the code we need to find the length in some cases so we used it
+        count=0
+        itr=self.head
+        while itr:
+            count+=1
+            itr=itr.next #we are moving values to next by next manually
+        return count
+
+    def insert_at_beginning(self,data):
+        node=Node(data,self.head) #It creates a new Node object with the provided data,
+        # and its next points to the current head of the list
+        self.head=node #we are inserting at the beginning so that value should be the head Then, it updates the head to the newly created node,
+        # effectively making it the new head of the list.
+    def insert_at_end(self,data):
+        if not self.head:
+            self.head=Node(data,None) # if it is empty we need to give current value and next value
+            return
+
+        itr=self.head
+        while itr.next:
+            itr=itr.next #moving all next values to previous values and finally updating last next value
+        itr.next=Node(data,None)
+
+     # here we are using our own insertatend function//  either self.insert_at_end(i) or LinkedList.insert_at_end(self,i)
+
+    def insert_at(self,index,value):
+        if index<0 or index>self.get_length():
+            raise Exception("Invalid Index")
+        if index==0:
+            self.insert_at_beginning(value) #using our function itself
+        count=0
+        itr=self.head
+        while itr:
+            if count==index-1:
+                node=Node(value,itr.next) #in linked list values will be inserted in between and should connect to next pointer so imagine how to insert inbetween
+                itr.next=node
+                break
+
+            itr=itr.next
+            count+=1
+
+    def remove_at(self,index):
+        if index<0 or index>self.get_length():
+            raise Exception("Invalid index")
+
+        if index==0:
+            self.head=self.head.next
+            return
+
+        count=0
+        itr=self.head
+        while itr:
+            if count==index-1:
+                itr.next=itr.next.next #we are moving to 2 values forward because we dont need inbetween value
+                break
+            itr=itr.next
+            count+=1
+
+
+    def print(self):
+        if not self.head:
+            print("list is empty")
+            return # If the linked list is empty, it serves as a way to terminate the function after printing the message.
+        itr=self.head
+        linklststr=""
+        while itr:
+            linklststr=linklststr+str(itr.data)+"=>"
+            itr=itr.next
+        print(linklststr)
+
+    def insert_values(self, data_values):
+        self.head = None
+        for i in data_values:
+            self.insert_at_end(i)
+
+if __name__=='__main__':
+    ll=LinkedList()
+    ll.insert_at_beginning(10)
+    ll.insert_at_beginning(7110)
+    ll.insert_at_end(1000)
+    ll.insert_at_end(5000)
+    ll.insert_at_end(8000)
+    ll.insert_values([7,8,9,10,11,12,13,14])
+    ll.insert_values(['apple','banana','orange','pineapple'])
+    ll.insert_at(1,'mango')
+    #ll.remove_at(4)
+
+    ll.print()
